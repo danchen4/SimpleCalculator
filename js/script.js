@@ -1,6 +1,5 @@
 let display = document.getElementById('display');
 
-
 // Numpad IDs
 let one = document.getElementById('one');
 let two = document.getElementById('two');
@@ -26,8 +25,10 @@ let changeBit = document.getElementById('changeBit');
 let percent = document.getElementById('percent');
 let squareRoot = document.getElementById('squareRoot');
 
+// Keypad presses
+window.addEventListener('keyup',keyRouting);
 
-// Numpad click Events
+// Number clicks
 one.addEventListener('click',numClick);
 two.addEventListener('click',numClick);
 three.addEventListener('click',numClick);
@@ -40,22 +41,18 @@ nine.addEventListener('click',numClick);
 zero.addEventListener('click',numClick);
 decimal.addEventListener('click',numClick);
 
-
-window.addEventListener('keyup',numKey);
-
-
 // Operator click Events
-add.addEventListener('click',basicOperator);
-subtract.addEventListener('click',basicOperator);
-multiply.addEventListener('click',basicOperator);
-divide.addEventListener('click',basicOperator);
+add.addEventListener('click',operatorClick);
+subtract.addEventListener('click',operatorClick);
+multiply.addEventListener('click',operatorClick);
+divide.addEventListener('click',operatorClick);
+squareRoot.addEventListener('click',squareRootClick);
 
 equal.addEventListener('click',equate);
 
 // Change displayed numbers
 percent.addEventListener('click',numClick);
-
-changeBit.addEventListener('click',changeSign)
+changeBit.addEventListener('click',changeBitClick)
 
 
 
@@ -91,7 +88,6 @@ class UI {
             }
             numberIsTotal = false;
         }
-
         
         console.log(`numbers[] after store: ${numbers}`);
     }
@@ -182,7 +178,7 @@ let numberIsTotal = false;  //Track to see if number in numbers[] is the total f
 // Events
 
 // 
-function numKey (e) {
+function keyRouting (e) {
     // console.log(e.key);
     
     // Only display numbers 
@@ -242,8 +238,7 @@ function numClick (e) {
 }
 
 // All basic math (+,-,x,/) operator click 
-function basicOperator (e) {
-
+function operatorClick (e) {
     // Store what's in displayNumbers into numbers[] array if not blank
     if (displayNumbers !== '') {
         console.log(`displayNumbers BBB: ${displayNumbers}`);
@@ -261,7 +256,7 @@ function basicOperator (e) {
     
 }
 
-function changeSign (e) {
+function changeBitClick (e) {
     if (displayNumbers !== '') { 
         let array = displayNumbers.split('');
         if (!displayNumbers.includes('-')) {  
@@ -279,6 +274,11 @@ function changeSign (e) {
     }
 }
 
+    function squareRootClick (e) {
+            displayNumbers = Math.sqrt(displayNumbers).toString();  //Math.sqrt will convert to number
+            UI.displayNumber(displayNumbers);
+        }
+    
 // Equal sign click
 function equate(e) {
     // Need to store Numbers from last entry
