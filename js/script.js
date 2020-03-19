@@ -29,31 +29,30 @@ let squareRoot = document.getElementById('squareRoot');
 window.addEventListener('keyup',keyRouting);
 
 // Number clicks
-one.addEventListener('click',numClick);
-two.addEventListener('click',numClick);
-three.addEventListener('click',numClick);
-four.addEventListener('click',numClick);
-five.addEventListener('click',numClick);
-six.addEventListener('click',numClick);
-seven.addEventListener('click',numClick);
-eight.addEventListener('click',numClick);
-nine.addEventListener('click',numClick);
-zero.addEventListener('click',numClick);
-decimal.addEventListener('click',numClick);
+one.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+two.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+three.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+four.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+five.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+six.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+seven.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+eight.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+nine.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+zero.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+decimal.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
 
 // Operator click Events
-add.addEventListener('click',operatorClick);
-subtract.addEventListener('click',operatorClick);
-multiply.addEventListener('click',operatorClick);
-divide.addEventListener('click',operatorClick);
-squareRoot.addEventListener('click',squareRootClick);
+add.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+subtract.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+multiply.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+divide.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+squareRoot.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
 
 equal.addEventListener('click',equate);
 
 // Change displayed numbers
-percent.addEventListener('click',numClick);
+percent.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
 changeBit.addEventListener('click',changeBitClick)
-
 
 
 clearEntry.addEventListener('click',clearE);
@@ -88,14 +87,12 @@ class UI {
             }
             numberIsTotal = false;
         }
-        
         console.log(`numbers[] after store: ${numbers}`);
     }
 
     // Stores operator in operator[]
     static storeOperator (item) {
-    
-        if (operator.length < numbers.length) { // Dont' store operators if numbers[] is empty
+            if (operator.length < numbers.length) { // Dont' store operators if numbers[] is empty
             operator.unshift(item);
         } else if (operator.length !== 0){ // If pressing/clicking operators in succession, take the most recent press/click and store
             operator.splice(0,1,item);
@@ -103,13 +100,9 @@ class UI {
         console.log(`operator[] after store: ${operator}`);
     }
 
-    // Clear displayNumbers;
-    static clearDisplayNumbers() {
-        displayNumbers = '';
-    }
-
-    // Clear display
+    // Clear display and displayNumbers;
     static clearDisplay() {
+        displayNumbers = '';
         display.innerHTML = '';
     }
 
@@ -127,19 +120,11 @@ class mathCalc {
 
         if (numbers.length > 0 ) { //Make sure numbers[] has at least 1 item, or else infinite loop
             while (numbers.length > 1) {  // Since var_total is unshifted to inputs, length will be minimum 1
+
             // Create variable to store running total
-            // console.log(`numbers[] before Shift: ${numbers}`);
-
             let variable1 = Number(numbers.shift());
-            // console.log(`Variable1: ${variable1}`);
-
             let variable2 = Number(numbers.shift());
-            // console.log(`Variable2: ${variable2}`);
-
             let operate = operator.shift();
-
-            // console.log(`numbers[] after Shift: ${numbers}`);
-            // console.log(`operator[] after Shift: ${operator}`);
 
             switch (operate) {
                 case '+': 
@@ -161,7 +146,7 @@ class mathCalc {
             }
 
             numbers.unshift(total);
-            numberIsTotal = true;
+            numberIsTotal = true;  //When total is stored, then sit the flag to true (to handle +/-)
             }
         }
         console.log(total);
@@ -179,80 +164,58 @@ let numberIsTotal = false;  //Track to see if number in numbers[] is the total f
 
 // 
 function keyRouting (e) {
-    // console.log(e.key);
-    
-    // Only display numbers 
-    if (!isNaN(e.key)) {
-        displayNumbers += `${e.key}`;
-        UI.displayNumber(displayNumbers);  
+
+    console.log(e.key);
+   
+    // If a number is keyed then call function
+    if (!isNaN(e.key) || e.key === '%' || e.key ==='.') {
+        numberInput(e.key);  
     }
 
-    // console.log(numbers.displayNumbers);
-    // console.log(operator.length);
-
     // There should always be an odd items of operators and even number of numbers to prevent adding multiple operators
-        switch (e.key) {            
-            case '+':
-            case '-':
-            case '*':
-            case 'x':
-            case '÷':
-            case '/':    
-                // Dont' store blank spaces in array if hitting operator buttons first
-                if (displayNumbers !== '') {     
-                    UI.storeNumbers(displayNumbers);
-                    UI.clearDisplay();
-                };               
-                
-                //  If operators are keyed first, then don't store in operators[] array
-                UI.storeOperator(e.key);
-                
-                break;
-            case 'Enter':
-            case '=':
-                // Dont' store blank spaces in array if hitting Enter/Equal button first.
-                // Don't      
-                console.log(`displayNumbers: ${displayNumbers}`);
-                console.log(`operator.length : ${operator.length}`);
-                
-                if (displayNumbers !== '') {  
-                    UI.storeNumbers(displayNumbers);
-                    UI.clearDisplay();
-                };
-             
-                // If hitting 'Enter' or 'equal' sign sequentially, don't recalculate and display
-                if (operator.length > 0) {
-                    UI.displayNumber(mathCalc.calculate());
-                }
-                break;
-        }
+    switch (e.key) {            
+        case '+':
+        case '-':
+        case '*':
+        case 'x':
+        case '÷':
+        case '/':   
+            // Dont' store blank spaces in array if hitting operator buttons first
+            operatorInput (e.key);
+            break;
+        case 'Enter':
+        case '=':
+            equate (e.key);
+            break;
+        case 'Backspace':
+            clearE();
+            break;
+        case 'Delete':
+            clearA();
+            break;
+    }
 }
 
-// Num clicks
-function numClick (e) {
-     // Everytime a number is clicked, append to var_displayNumbers
+// Handles number inputs and % and .
+function numberInput (input) {
+       // Everytime a number is clicked, append to var_displayNumbers
     if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s to be appended
-        displayNumbers += `${e.target.innerText}`;
+        displayNumbers += `${input}`;
         UI.displayNumber(displayNumbers);
     } 
 }
 
-// All basic math (+,-,x,/) operator click 
-function operatorClick (e) {
+// Handles math operator inputs: +,-,*,/
+function operatorInput (input) {
     // Store what's in displayNumbers into numbers[] array if not blank
     if (displayNumbers !== '') {
-        console.log(`displayNumbers BBB: ${displayNumbers}`);
         UI.storeNumbers(displayNumbers);
     }
-
     // Clear display
     UI.clearDisplay();
-
-    // Clear displayNumbers
-    UI.clearDisplayNumbers();
     
     // There should always be an odd items of operators and even number of numbers to prevent adding multiple operators
-    UI.storeOperator(e.target.innerText);
+    UI.storeOperator(input);
     
 }
 
@@ -280,12 +243,11 @@ function changeBitClick (e) {
         }
     
 // Equal sign click
-function equate(e) {
+function equate() {
     // Need to store Numbers from last entry
     if (displayNumbers !== '') {  
         UI.storeNumbers(displayNumbers);
         UI.clearDisplay();
-        UI.clearDisplayNumbers();
     };
 
     // Calcuate arithmetic operation based on sequence of inputs[] and operator[] arrays
@@ -298,12 +260,10 @@ function equate(e) {
 // Clear Entry
 function clearE(e) {
     UI.clearDisplay();
-    UI.clearDisplayNumbers();
 }
 
 // Clear All
 function clearA(e) {
     UI.clearDisplay();
-    UI.clearDisplayNumbers();
     UI.clearArrays();
 }
