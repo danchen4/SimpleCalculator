@@ -1,63 +1,3 @@
-let display = document.getElementById('display');
-
-// Numpad IDs
-let one = document.getElementById('one');
-let two = document.getElementById('two');
-let three = document.getElementById('three');
-let four = document.getElementById('four');
-let five = document.getElementById('five');
-let six = document.getElementById('six');
-let seven = document.getElementById('seven');
-let eight = document.getElementById('eight');
-let nine = document.getElementById('nine');
-let zero = document.getElementById('zero');
-let decimal = document.getElementById('decimal');
-
-// Operator IDs
-let clearEntry = document.getElementById('clearEntry');
-let clearAll = document.getElementById('clearAll');
-let divide = document.getElementById('divide');
-let multiply = document.getElementById('multiply');
-let subtract = document.getElementById('subtract');
-let add = document.getElementById('add');
-let equal = document.getElementById('equal');
-let changeBit = document.getElementById('changeBit');
-let percent = document.getElementById('percent');
-let squareRoot = document.getElementById('squareRoot');
-
-// Keypad presses
-window.addEventListener('keyup',keyRouting);
-
-// Number clicks
-one.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-two.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-three.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-four.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-five.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-six.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-seven.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-eight.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-nine.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-zero.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-decimal.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-
-// Operator click Events
-add.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-subtract.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-multiply.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-divide.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-squareRoot.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-
-equal.addEventListener('click',equate);
-
-// Change displayed numbers
-percent.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-changeBit.addEventListener('click',changeBitClick)
-
-
-clearEntry.addEventListener('click',clearE);
-clearAll.addEventListener('click',clearA);
-
 
 // UI class for UI functions
 class UI {
@@ -157,14 +97,85 @@ class mathCalc {
 const numbers = [];
 const operator = [];
 const inputs = [];
-let displayNumbers = '';  // Storing display
-let numberIsTotal = false;  //Track to see if number in numbers[] is the total from previous equation
+let displayNumbers = '';  // Stores display text
+let numberIsTotal = false;  //Flag to check if item in numbers[] is the total from previous equation
+let varA,
+    varB,
+    varC,
+    varD
+
+//DOM Items
+ 
+let display = document.getElementById('display');
+
+// Numpad IDs
+let one = document.getElementById('one');
+let two = document.getElementById('two');
+let three = document.getElementById('three');
+let four = document.getElementById('four');
+let five = document.getElementById('five');
+let six = document.getElementById('six');
+let seven = document.getElementById('seven');
+let eight = document.getElementById('eight');
+let nine = document.getElementById('nine');
+let zero = document.getElementById('zero');
+let decimal = document.getElementById('decimal');
+
+// Operator IDs
+let clearEntry = document.getElementById('clearEntry');
+let clearAll = document.getElementById('clearAll');
+let divide = document.getElementById('divide');
+let multiply = document.getElementById('multiply');
+let subtract = document.getElementById('subtract');
+let add = document.getElementById('add');
+let equal = document.getElementById('equal');
+let changeBit = document.getElementById('changeBit');
+let percent = document.getElementById('percent');
+let squareRoot = document.getElementById('squareRoot');
+
+// Variable IDs
+let variable = document.getElementById('variable');
+
+// Keyboard presses
+window.addEventListener('keyup',keyBoardRouting);
+
+// Number mouse clicks
+one.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+two.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+three.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+four.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+five.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+six.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+seven.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+eight.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+nine.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+zero.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+decimal.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+
+// Operator mouse clicks
+add.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+subtract.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+multiply.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+divide.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+squareRoot.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+
+// Equal sign click
+equal.addEventListener('click',equate);
+
+// '%' and '+/-' click
+percent.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+changeBit.addEventListener('click',changeBitInput)
+
+// Clear button mouse clicks
+clearEntry.addEventListener('click',clearE);
+clearAll.addEventListener('click',clearA);
+
+// Varible button mouse clicks
+variable.addEventListener('click',storeVariable);
 
 // Events
 
-// 
-function keyRouting (e) {
-
+function keyBoardRouting (e) {
     console.log(e.key);
    
     // If a number is keyed then call function
@@ -196,7 +207,7 @@ function keyRouting (e) {
     }
 }
 
-// Handles number inputs and % and .
+// Handles number inputs and '%' and '.'
 function numberInput (input) {
        // Everytime a number is clicked, append to var_displayNumbers
     if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s to be appended
@@ -213,13 +224,13 @@ function operatorInput (input) {
     }
     // Clear display
     UI.clearDisplay();
-    
+
     // There should always be an odd items of operators and even number of numbers to prevent adding multiple operators
     UI.storeOperator(input);
     
 }
 
-function changeBitClick (e) {
+function changeBitInput (e) {
     if (displayNumbers !== '') { 
         let array = displayNumbers.split('');
         if (!displayNumbers.includes('-')) {  
