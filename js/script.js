@@ -74,15 +74,25 @@ class UI {
     // Stores numbers in numbers[]
     static storeNumbers (item) {
 
-        if ((numbers.length === 0 && operator.length === 0) || (numbers.length === operator.length)) {//When both numbers[] and operator[] are empty then store in numbers
-            if (item.includes('%')) {  //If displayed number contains a '%' then conver to percentage
+        if ((numbers.length === 0 && operator.length === 0) || numbers.length === operator.length) {//When both numbers[] and operator[] are empty or equal in length then store
+            if (item.includes('%')) { //If displayed number contains a '%' then convert to percentage
                 numbers.unshift(parseFloat(item)/100);
             } else {
-            numbers.unshift(item);
+                numbers.unshift(parseFloat(item));
             }
         } 
 
-        numberIsTotal = false;
+        // If number is Total from previous answer, then replace Total in case of '+/-' or %
+        if (numberIsTotal) {
+            if (item.includes('%')) {
+                numbers.splice(0,1,parseFloat(item)/100)
+            } else {
+                numbers.splice(0,1,item)
+            }
+            numberIsTotal = false;
+        }
+
+        
         console.log(`numbers[] after store: ${numbers}`);
     }
 
@@ -158,6 +168,7 @@ class mathCalc {
             numberIsTotal = true;
             }
         }
+        console.log(total);
         return total;
     }
 }
@@ -235,6 +246,7 @@ function basicOperator (e) {
 
     // Store what's in displayNumbers into numbers[] array if not blank
     if (displayNumbers !== '') {
+        console.log(`displayNumbers BBB: ${displayNumbers}`);
         UI.storeNumbers(displayNumbers);
     }
 
@@ -257,8 +269,7 @@ function changeSign (e) {
             displayNumbers = array.join('');
             UI.displayNumber(displayNumbers);
             if (numberIsTotal) {  // If number in numbers[] is total from previous equation, then need to change sign in numbers[]
-                let negative = numbers[0] * -1;
-                numbers.splice(0,1,negative);
+                numbers.splice(0,1,numbers[0] * -1);
             }
         } else if (displayNumbers.includes('-')) {
             array.shift();
