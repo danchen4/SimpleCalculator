@@ -1,0 +1,56 @@
+// Variables
+$-c-gold-1 : #816E2C;
+$-c-green-1:rgb(54, 148, 90); 
+$-c-blue-1: rgb(24, 24, 173);
+$-c-red-1: rgb(112, 20, 20);
+$-c-grey-1: #999ba0;
+
+
+// Mixins
+@mixin flex ($direction, $justify, $align-items) {
+    display: flex;
+    flex-direction:$direction;
+    justify-content:$justify;
+    align-items: $align-items;
+}
+
+@mixin grid () {
+    display:grid;
+}
+
+// Utility
+.flex-c-center {
+    @include flex(row, center, center);
+}
+
+
+#calculator {
+    max-width: 500px;
+    width: 100%;
+}
+
+#display {
+    width: 400px;
+    height: 40px;
+    @include flex(column,center,flex-end);
+}
+
+#pad {
+    width: 400px;
+    text-align: center;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 1em;
+}
+
+#pad > div {
+    background: #eee;
+    padding: 1em;
+}
+
+#pad > div:nth-child(odd) {
+    background: #ddd;
+}
+
+
+
