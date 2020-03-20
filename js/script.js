@@ -41,10 +41,12 @@ class UI {
     }
 
     static storeVariables (input) {
-        if (displayNumbers.includes('%')) { //If displayed number contains a '%' then convert to percentage
-            variableObj[input] = parseFloat(displayNumbers)/100;
-        } else {
-            variableObj[input] = parseFloat(displayNumbers);
+        if (displayNumbers !== '') {
+            if (displayNumbers.includes('%')) { //If displayed number contains a '%' then convert to percentage
+                variableObj[input] = parseFloat(displayNumbers)/100;
+            } else {
+                variableObj[input] = parseFloat(displayNumbers);
+            }
         }
 
         UI.displayVariablesOnButton(input);
@@ -53,7 +55,6 @@ class UI {
 
     static getVariables (variable) {
         UI.clearDisplay;
-        console.log(`getVariables: ${variableObj[variable]}`);
         UI.storeNumbers(variableObj[variable].toString());
         UI.displayNumber(variableObj[variable]);
     }
@@ -64,7 +65,19 @@ class UI {
         let div = document.querySelector(`btn-${variable}`);
         
         newdiv.className = 'variable';
-        newdiv.textContent = displayNumbers;
+        
+        // Need to remove decimals places past 2 and append '..' if 3 or more decimal places;
+        
+        if (displayNumbers.includes('.')) {
+            let modifiedText = displayNumbers.substr(0,displayNumbers.indexOf('.') + 3);
+            if (displayNumbers.length - displayNumbers.indexOf('.') > 3) {
+                newdiv.textContent = `${modifiedText}..`;
+            } else {
+                newdiv.textContent = modifiedText;
+            }
+        } else {
+            newdiv.textContent = displayNumbers;
+        }
 
         parent.insertBefore(newdiv,div)
     }
@@ -254,7 +267,7 @@ function ioVariable(input) {
 function numberInput (input) {
        // Everytime a number is clicked, append to var_displayNumbers
        
-    if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s to be appended
+    if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s or '.'s to be appended
         displayNumbers += `${input}`;
         UI.displayNumber(displayNumbers);
     } 

@@ -5,6 +5,8 @@ $-c-blue-1: rgb(24, 24, 173);
 $-c-red-1: rgb(112, 20, 20);
 $-c-grey-1: #999ba0;
 
+$boxshadow-btn: (4px 4px 4px -5px rgba(0,0,0,0.40));
+
 
 // Mixins
 @mixin flex ($direction, $justify, $align-items) {
@@ -41,7 +43,7 @@ $-c-grey-1: #999ba0;
     display:grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1em;
-    grid-auto-rows: minmax(50px,auto);
+    grid-auto-rows: 50px;
 }
 
 #pad > div {
@@ -58,6 +60,15 @@ $-c-grey-1: #999ba0;
 }
 
 .variable {
-    color: #999ba0;
+    color:$-c-grey-1;
     font-size: 10px;
+}
+
+.num-button {
+    box-shadow: $boxshadow-btn;
+}
+
+.test:hover {
+    margin: 2px -2px -2px 2px;
+    box-shadow: none;
 }

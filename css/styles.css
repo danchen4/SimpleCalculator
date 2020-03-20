@@ -45,7 +45,7 @@
   -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr;
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 1em;
-  grid-auto-rows: minmax(50px, auto);
+  grid-auto-rows: 50px;
 }
 
 #pad > div {
@@ -88,5 +88,16 @@
 .variable {
   color: #999ba0;
   font-size: 10px;
+}
+
+.num-button {
+  -webkit-box-shadow: 4px 4px 4px -5px rgba(0, 0, 0, 0.4);
+          box-shadow: 4px 4px 4px -5px rgba(0, 0, 0, 0.4);
+}
+
+.test:hover {
+  margin: 2px -2px -2px 2px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 /*# sourceMappingURL=styles.css.map */
