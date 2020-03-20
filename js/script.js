@@ -3,12 +3,12 @@
 class UI {
 
     // Displays numpad buttons in #display
-    static displayNumber (disp) {
+    static displayNumber(disp) {
         display.textContent = disp;
     }
 
     // Stores numbers in numbers[]
-    static storeNumbers (item) {
+    static storeNumbers(item) {
 
         if ((numbers.length === 0 && operator.length === 0) || numbers.length === operator.length) {//When both numbers[] and operator[] are empty or equal in length then store
             if (item.includes('%')) { //If displayed number contains a '%' then convert to percentage
@@ -21,9 +21,9 @@ class UI {
         // If number is Total from previous answer, then replace Total in case of '+/-' or %
         if (numberIsTotal) {
             if (item.includes('%')) {
-                numbers.splice(0,1,parseFloat(item)/100)
+                numbers.splice(0,1,parseFloat(item)/100);
             } else {
-                numbers.splice(0,1,item)
+                numbers.splice(0,1,item);
             }
             numberIsTotal = false;
         }
@@ -38,6 +38,35 @@ class UI {
             operator.splice(0,1,item);
         }
         console.log(`operator[] after store: ${operator}`);
+    }
+
+    static storeVariables (input) {
+        if (displayNumbers.includes('%')) { //If displayed number contains a '%' then convert to percentage
+            variableObj[input] = parseFloat(displayNumbers)/100;
+        } else {
+            variableObj[input] = parseFloat(displayNumbers);
+        }
+
+        UI.displayVariablesOnButton(input);
+        console.log(variableObj);   
+    }
+
+    static getVariables (variable) {
+        UI.clearDisplay;
+        console.log(`getVariables: ${variableObj[variable]}`);
+        UI.storeNumbers(variableObj[variable].toString());
+        UI.displayNumber(variableObj[variable]);
+    }
+
+    static displayVariablesOnButton (variable) {
+        let newdiv = document.createElement('div');
+        let parent = document.getElementById(`variable${variable}`);
+        let div = document.querySelector(`btn-${variable}`);
+        
+        newdiv.className = 'variable';
+        newdiv.textContent = displayNumbers;
+
+        parent.insertBefore(newdiv,div)
     }
 
     // Clear display and displayNumbers;
@@ -99,13 +128,10 @@ const operator = [];
 const inputs = [];
 let displayNumbers = '';  // Stores display text
 let numberIsTotal = false;  //Flag to check if item in numbers[] is the total from previous equation
-let varA,
-    varB,
-    varC,
-    varD
+let variableObj = {};
 
 //DOM Items
- 
+
 let display = document.getElementById('display');
 
 // Numpad IDs
@@ -134,7 +160,10 @@ let percent = document.getElementById('percent');
 let squareRoot = document.getElementById('squareRoot');
 
 // Variable IDs
-let variable = document.getElementById('variable');
+let variableA = document.getElementById('variableA');
+let variableB = document.getElementById('variableB');
+let variableC = document.getElementById('variableC');
+let variableD = document.getElementById('variableD');
 
 // Keyboard presses
 window.addEventListener('keyup',keyBoardRouting);
@@ -157,7 +186,7 @@ add.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
 subtract.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
 multiply.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
 divide.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-squareRoot.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
+squareRoot.addEventListener('click',(e)=>{squareRootInput(e.target.innerText)});
 
 // Equal sign click
 equal.addEventListener('click',equate);
@@ -171,7 +200,10 @@ clearEntry.addEventListener('click',clearE);
 clearAll.addEventListener('click',clearA);
 
 // Varible button mouse clicks
-variable.addEventListener('click',storeVariable);
+variableA.addEventListener('click',()=>{ioVariable('A')});
+variableB.addEventListener('click',()=>{ioVariable('B')});
+variableC.addEventListener('click',()=>{ioVariable('C')});
+variableD.addEventListener('click',()=>{ioVariable('D')});
 
 // Events
 
@@ -207,9 +239,21 @@ function keyBoardRouting (e) {
     }
 }
 
+// Stores variable inputs
+function ioVariable(input) {
+    if(input in variableObj) {
+        console.log('Get');
+        UI.getVariables(input);
+    } else {
+        console.log('Store');
+        UI.storeVariables(input);
+    }
+}
+
 // Handles number inputs and '%' and '.'
 function numberInput (input) {
        // Everytime a number is clicked, append to var_displayNumbers
+       
     if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s to be appended
         displayNumbers += `${input}`;
         UI.displayNumber(displayNumbers);
@@ -227,7 +271,6 @@ function operatorInput (input) {
 
     // There should always be an odd items of operators and even number of numbers to prevent adding multiple operators
     UI.storeOperator(input);
-    
 }
 
 function changeBitInput (e) {
@@ -248,10 +291,10 @@ function changeBitInput (e) {
     }
 }
 
-    function squareRootClick (e) {
-            displayNumbers = Math.sqrt(displayNumbers).toString();  //Math.sqrt will convert to number
-            UI.displayNumber(displayNumbers);
-        }
+function squareRootInput (e) {
+        displayNumbers = Math.sqrt(displayNumbers).toString();  //Math.sqrt will convert to number
+        UI.displayNumber(displayNumbers);
+}
     
 // Equal sign click
 function equate() {
