@@ -265,11 +265,16 @@ function ioVariable(input) {
 
 // Handles number inputs and '%' and '.'
 function numberInput (input) {
-       // Everytime a number is clicked, append to var_displayNumbers
-       
-    if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s or '.'s to be appended
-        displayNumbers += `${input}`;
-        UI.displayNumber(displayNumbers);
+    console.log(displayNumbers.split('.').length -1);
+
+    // Everytime a number is clicked, append to var_displayNumbers     
+    if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s to be appended
+        let displayNumbersCopy = displayNumbers;
+        displayNumbersCopy += `${input}`;
+        if (displayNumbersCopy.split('.').length -1 < 2) {  //Don't allow multiple '.'s to be added
+            displayNumbers += `${input}`; 
+            UI.displayNumber(displayNumbers);
+        }       
     } 
 }
 
