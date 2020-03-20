@@ -1,9 +1,13 @@
 // Variables
-$-c-gold-1 : #816E2C;
-$-c-green-1:rgb(54, 148, 90); 
-$-c-blue-1: rgb(24, 24, 173);
-$-c-red-1: rgb(112, 20, 20);
-$-c-grey-1: #999ba0;
+$-c-brown-1:rgb(251, 242, 228);
+$-c-green-1:rgb(173, 203, 183); 
+$-c-blue-1: rgb(159, 181, 205);
+$-c-blue-2: rgb(41, 124, 161);
+$-c-red-1: rgb(217, 113, 113);
+$-c-grey-1: rgb(159, 184, 195);
+$-c-grey-2: rgb(185, 198, 200);
+$-c-grey-3: rgb(225, 225, 225);
+$-c-grey-4: rgb(250, 250, 250);
 
 $boxshadow-btn: (4px 4px 4px -5px rgba(0,0,0,0.40));
 
@@ -27,18 +31,24 @@ $boxshadow-btn: (4px 4px 4px -5px rgba(0,0,0,0.40));
 
 
 #calculator {
-    max-width: 500px;
-    width: 100%;
+    width: 480px;
+    padding: 40px;
+    border: 1px solid $-c-grey-3;
+    border-radius: 6px;
+    background: $-c-grey-4;
+    box-shadow:$boxshadow-btn;
 }
 
 #display {
-    width: 400px;
-    height: 40px;
+    width: 100%;
+    margin: 0 auto;
+    height: 50px;
     @include flex(column,center,flex-end);
+    background: white;
 }
 
 #pad {
-    width: 400px;
+    padding-top: 30px;
     text-align: center;
     display:grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -47,12 +57,7 @@ $boxshadow-btn: (4px 4px 4px -5px rgba(0,0,0,0.40));
 }
 
 #pad > div {
-    background: #eee;
     @include flex(column,center,center);
-}
-
-#pad > div:nth-child(odd) {
-    background: #ddd;
 }
 
 .btn-var {
@@ -72,3 +77,10 @@ $boxshadow-btn: (4px 4px 4px -5px rgba(0,0,0,0.40));
     margin: 2px -2px -2px 2px;
     box-shadow: none;
 }
+
+.btn-color-1 {background: $-c-grey-3}
+.btn-color-2 {background: $-c-grey-2}
+.btn-color-3 {background: $-c-red-1}
+.btn-color-4 {background: $-c-blue-1}
+.btn-color-5 {background: $-c-green-1}
+.btn-color-6 {background: $-c-brown-1}
