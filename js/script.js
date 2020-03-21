@@ -100,6 +100,7 @@ class UI {
     }
 
     static async animateButton (element) {
+        clickSound.play(); // Play sound
         element.style.margin = '2px -2px -2px 2px';
         element.style.boxShadow = 'none';
         await setTimeout(()=>{
@@ -169,8 +170,11 @@ let displayNumbers = '';  // Stores display text
 let numberIsTotal = false;  //Flag to check if item in numbers[] is the total from previous equation
 let variableObj = {};
 
-//DOM Items
+// Calculator sound on clicks and Keyboard presses
+let clickSound = new Audio();
+clickSound.src='../media/audio/office-calculator-single-button-press.mp3';
 
+//DOM Items
 let display = document.getElementById('display');
 
 // Numpad IDs
