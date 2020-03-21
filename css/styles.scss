@@ -39,7 +39,6 @@ $-font-2: 'Roboto', sans-serif;
     @include flex(row, center, center);
 }
 
-
 #calculator {
     width: 480px;
     padding: 40px;
@@ -57,15 +56,16 @@ $-font-2: 'Roboto', sans-serif;
     box-shadow: $-boxshadow-screen;
 }
 
-
 #display {
     height: 100%;
     @include flex(column,center,flex-end);
     background-color: $-c-green-3;
     font-family: $-font-1;
     font-size: 32px;
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: 4px;
+    overflow: hidden;
+    z-index: 2;
 }
 
 #pad {
@@ -102,9 +102,9 @@ $-font-2: 'Roboto', sans-serif;
     box-shadow: none;
 }
 
-.btn-color-1 {background: $-c-grey-3}
-.btn-color-2 {background: $-c-grey-2}
-.btn-color-3 {background: $-c-red-1}
-.btn-color-4 {background: $-c-blue-1}
-.btn-color-5 {background: $-c-green-1}
-.btn-color-6 {background: $-c-brown-1}
+.btn-color-1 {background: $-c-grey-3;}
+.btn-color-2 {background: $-c-grey-2;}
+.btn-color-3 {background: $-c-red-1;}
+.btn-color-4 {background: $-c-blue-1;}
+.btn-color-5 {background: $-c-green-1;}
+.btn-color-6 {background: $-c-brown-1;}

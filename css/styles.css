@@ -58,8 +58,10 @@
   background-color: rgba(207, 224, 206, 0.4);
   font-family: "Quantico", sans-serif;
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 4px;
+  overflow: hidden;
+  z-index: 2;
 }
 
 #pad {

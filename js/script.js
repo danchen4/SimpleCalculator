@@ -4,7 +4,13 @@ class UI {
 
     // Displays numpad buttons in #display
     static displayNumber(disp) {
-        display.textContent = disp;
+        // Do not display more than 10 digits append '..' if 8 or more decimal places; 
+        if (displayNumbers.includes('.')) {
+            let modifiedText = displayNumbers.substr(0,displayNumbers.indexOf('.') + 10);
+            display.textContent = modifiedText;
+        } else {
+            display.textContent = disp;
+        }
     }
 
     // Stores numbers in numbers[]
@@ -32,7 +38,7 @@ class UI {
 
     // Stores operator in operator[]
     static storeOperator (item) {
-            if (operator.length < numbers.length) { // Dont' store operators if numbers[] is empty
+        if (operator.length < numbers.length) { // Dont' store operators if numbers[] is empty
             operator.unshift(item);
         } else if (operator.length !== 0){ // If pressing/clicking operators in succession, take the most recent press/click and store
             operator.splice(0,1,item);
@@ -66,24 +72,40 @@ class UI {
         
         newdiv.className = 'variable';
         
-        // Need to remove decimals places past 2 and append '..' if 3 or more decimal places;
-        
+        // Need to remove decimals places past 2 and append '..' if 3 or more decimal places; 
         if (displayNumbers.includes('.')) {
             let modifiedText = displayNumbers.substr(0,displayNumbers.indexOf('.') + 3);
             if (displayNumbers.length - displayNumbers.indexOf('.') > 3) {
-                newdiv.textContent = `${modifiedText}..`;
+                // newdiv.textContent = `${modifiedText}..`;
+                parent.innerHTML =`
+                    Var ${variable}<br>
+                    <span class="variable">${modifiedText}..</span>
+                `;
             } else {
-                newdiv.textContent = modifiedText;
+                // newdiv.textContent = modifiedText;
+                parent.innerHTML = `
+                    Var ${variable}<br>
+                    <span class="variable">${modifiedText}</span>
+                `;
             }
         } else {
-            newdiv.textContent = displayNumbers;
+            // newdiv.textContent = displayNumbers;
+            parent.innerHTML = `
+                Var ${variable}<br>
+                <span class="variable">${displayNumbers}</span>
+            `;
         }
 
-        parent.insertBefore(newdiv,div)
+        // parent.insertBefore(newdiv,div);
     }
 
-    static animateButton (element) {
+    static async animateButton (element) {
         element.style.margin = '2px -2px -2px 2px';
+        element.style.boxShadow = 'none';
+        await setTimeout(()=>{
+            element.style.margin = '0';
+            element.style.boxShadow = '4px 4px 4px -5px rgba(0, 0, 0, 0.4)';   
+        },100)
     }
 
     // Clear display and displayNumbers;
@@ -186,46 +208,48 @@ let variableD = document.getElementById('variableD');
 window.addEventListener('keyup',keyBoardRouting);
 
 // Number mouse clicks
-one.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-two.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-three.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-four.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-five.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-six.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-seven.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-eight.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-nine.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-zero.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-decimal.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
+one.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+two.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+three.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+four.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+five.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+six.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+seven.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+eight.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+nine.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+zero.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+decimal.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
 
 // Operator mouse clicks
-add.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-subtract.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-multiply.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-divide.addEventListener('click',(e)=>{operatorInput(e.target.innerText)});
-squareRoot.addEventListener('click',(e)=>{squareRootInput(e.target.innerText)});
+add.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.animateButton(e.target)});
+subtract.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.animateButton(e.target)});
+multiply.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.animateButton(e.target)});
+divide.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.animateButton(e.target)});
+squareRoot.addEventListener('click',(e)=>{squareRootInput(e.target.innerText), UI.animateButton(e.target)});
 
 // Equal sign click
 equal.addEventListener('click',equate);
 
 // '%' and '+/-' click
-percent.addEventListener('click',(e)=>{numberInput(e.target.innerText)});
-changeBit.addEventListener('click',changeBitInput)
+percent.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+changeBit.addEventListener('click',(e)=>{changeBitInput(e), UI.animateButton(e.target)})
 
 // Clear button mouse clicks
-clearEntry.addEventListener('click',clearE);
-clearAll.addEventListener('click',clearA);
+clearEntry.addEventListener('click',(e)=>{clearE(e), UI.animateButton(e.target)});
+clearAll.addEventListener('click',(e)=>{clearA(e), UI.animateButton(e.target)});
 
 // Varible button mouse clicks
-variableA.addEventListener('click',()=>{ioVariable('A')});
-variableB.addEventListener('click',()=>{ioVariable('B')});
-variableC.addEventListener('click',()=>{ioVariable('C')});
-variableD.addEventListener('click',()=>{ioVariable('D')});
+variableA.addEventListener('click',(e)=>{ioVariable('A'), UI.animateButton(e.target)});
+variableB.addEventListener('click',(e)=>{ioVariable('B'), UI.animateButton(e.target)});
+variableC.addEventListener('click',(e)=>{ioVariable('C'), UI.animateButton(e.target)});
+variableD.addEventListener('click',(e)=>{ioVariable('D'), UI.animateButton(e.target)});
 
 // Events
 
 function keyBoardRouting (e) {
+    let capitalize;
     console.log(e.key);
+    console.log(e);
    
     // If a number is keyed then call function
     if (!isNaN(e.key) || e.key === '%' || e.key ==='.') {
@@ -253,10 +277,26 @@ function keyBoardRouting (e) {
         case 'Delete':
             clearA();
             break;
+        case 'Q':
+        case 'q':
+            capitalize = e.key.toUpperCase();
+            squareRootInput (capitalize);
+            break;
+        case 'A':
+        case 'a':
+        case 'B':
+        case 'b':
+        case 'C':
+        case 'c':
+        case 'D':
+        case 'd':
+            capitalize = e.key.toUpperCase();
+            ioVariable(capitalize);
+            break;           
     }
 }
 
-// Stores variable inputs
+// Store or Get variable inputs
 function ioVariable(input) {
     if(input in variableObj) {
         console.log('Get');
