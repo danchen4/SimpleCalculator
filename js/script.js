@@ -82,6 +82,10 @@ class UI {
         parent.insertBefore(newdiv,div)
     }
 
+    static animateButton (element) {
+        element.style.margin = '2px -2px -2px 2px';
+    }
+
     // Clear display and displayNumbers;
     static clearDisplay() {
         displayNumbers = '';
@@ -265,8 +269,7 @@ function ioVariable(input) {
 
 // Handles number inputs and '%' and '.'
 function numberInput (input) {
-    console.log(displayNumbers.split('.').length -1);
-
+    console.log(input);
     // Everytime a number is clicked, append to var_displayNumbers     
     if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s to be appended
         let displayNumbersCopy = displayNumbers;

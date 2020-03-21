@@ -1,6 +1,13 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 // Variables
 $-c-brown-1:rgb(251, 242, 228);
 $-c-green-1:rgb(173, 203, 183); 
+$-c-green-3:rgba(207, 224, 206, 0.4); 
 $-c-blue-1: rgb(159, 181, 205);
 $-c-blue-2: rgb(41, 124, 161);
 $-c-red-1: rgb(217, 113, 113);
@@ -9,8 +16,11 @@ $-c-grey-2: rgb(185, 198, 200);
 $-c-grey-3: rgb(225, 225, 225);
 $-c-grey-4: rgb(250, 250, 250);
 
-$boxshadow-btn: (4px 4px 4px -5px rgba(0,0,0,0.40));
+$-boxshadow-btn: 4px 4px 4px -5px rgba(0, 0, 0, 0.4);
+$-boxshadow-screen: inset 0 0 5px rgba(26, 2, 2, 0.3);
 
+$-font-1: 'Quantico', sans-serif;
+$-font-2: 'Roboto', sans-serif;
 
 // Mixins
 @mixin flex ($direction, $justify, $align-items) {
@@ -36,20 +46,34 @@ $boxshadow-btn: (4px 4px 4px -5px rgba(0,0,0,0.40));
     border: 1px solid $-c-grey-3;
     border-radius: 6px;
     background: $-c-grey-4;
-    box-shadow:$boxshadow-btn;
+    box-shadow:$-boxshadow-btn;
 }
 
-#display {
+.screen {
+    background-color: rgba(240, 240, 240, 0.8);
     width: 100%;
-    margin: 0 auto;
     height: 50px;
+    margin: 0 auto;
+    box-shadow: $-boxshadow-screen;
+}
+
+
+#display {
+    height: 100%;
     @include flex(column,center,flex-end);
-    background: white;
+    background-color: $-c-green-3;
+    font-family: $-font-1;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 4px;
 }
 
 #pad {
     padding-top: 30px;
     text-align: center;
+    font-family: $-font-2;
+    font-size: 18px;
+    font-weight: 500;
     display:grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1em;
@@ -70,7 +94,7 @@ $boxshadow-btn: (4px 4px 4px -5px rgba(0,0,0,0.40));
 }
 
 .num-button {
-    box-shadow: $boxshadow-btn;
+    box-shadow: $-boxshadow-btn;
 }
 
 .test:hover {
