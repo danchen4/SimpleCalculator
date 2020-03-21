@@ -67,7 +67,7 @@ class UI {
 
     static displayVariablesOnButton (variable) {
         let newdiv = document.createElement('div');
-        let parent = document.getElementById(`variable${variable}`);
+        let parent = document.getElementById(variable);
         let div = document.querySelector(`btn-${variable}`);
         
         newdiv.className = 'variable';
@@ -105,7 +105,7 @@ class UI {
         await setTimeout(()=>{
             element.style.margin = '0';
             element.style.boxShadow = '4px 4px 4px -5px rgba(0, 0, 0, 0.4)';   
-        },100)
+        },150)
     }
 
     // Clear display and displayNumbers;
@@ -174,35 +174,35 @@ let variableObj = {};
 let display = document.getElementById('display');
 
 // Numpad IDs
-let one = document.getElementById('one');
-let two = document.getElementById('two');
-let three = document.getElementById('three');
-let four = document.getElementById('four');
-let five = document.getElementById('five');
-let six = document.getElementById('six');
-let seven = document.getElementById('seven');
-let eight = document.getElementById('eight');
-let nine = document.getElementById('nine');
-let zero = document.getElementById('zero');
-let decimal = document.getElementById('decimal');
+let one = document.getElementById('1');
+let two = document.getElementById('2');
+let three = document.getElementById('3');
+let four = document.getElementById('4');
+let five = document.getElementById('5');
+let six = document.getElementById('6');
+let seven = document.getElementById('7');
+let eight = document.getElementById('8');
+let nine = document.getElementById('9');
+let zero = document.getElementById('0');
+let decimal = document.getElementById('.');
 
 // Operator IDs
 let clearEntry = document.getElementById('clearEntry');
 let clearAll = document.getElementById('clearAll');
-let divide = document.getElementById('divide');
-let multiply = document.getElementById('multiply');
-let subtract = document.getElementById('subtract');
-let add = document.getElementById('add');
-let equal = document.getElementById('equal');
+let divide = document.getElementById('/');
+let multiply = document.getElementById('*');
+let subtract = document.getElementById('-');
+let add = document.getElementById('+');
+let equal = document.getElementById('=');
 let changeBit = document.getElementById('changeBit');
-let percent = document.getElementById('percent');
-let squareRoot = document.getElementById('squareRoot');
+let percent = document.getElementById('%');
+let squareRoot = document.getElementById('S');
 
 // Variable IDs
-let variableA = document.getElementById('variableA');
-let variableB = document.getElementById('variableB');
-let variableC = document.getElementById('variableC');
-let variableD = document.getElementById('variableD');
+let variableA = document.getElementById('A');
+let variableB = document.getElementById('B');
+let variableC = document.getElementById('C');
+let variableD = document.getElementById('D');
 
 // Keyboard presses
 window.addEventListener('keyup',keyBoardRouting);
@@ -247,13 +247,14 @@ variableD.addEventListener('click',(e)=>{ioVariable('D'), UI.animateButton(e.tar
 // Events
 
 function keyBoardRouting (e) {
-    let capitalize;
-    console.log(e.key);
-    console.log(e);
-   
+    let capitalize, key;
+    console.log(e.key);  
+
     // If a number is keyed then call function
     if (!isNaN(e.key) || e.key === '%' || e.key ==='.') {
-        numberInput(e.key);  
+        numberInput(e.key);
+        key = document.getElementById(e.key);
+        UI.animateButton(key);  
     }
 
     // There should always be an odd items of operators and even number of numbers to prevent adding multiple operators
@@ -266,21 +267,31 @@ function keyBoardRouting (e) {
         case '/':   
             // Dont' store blank spaces in array if hitting operator buttons first
             operatorInput (e.key);
+            key = document.getElementById(e.key);
+            UI.animateButton(key);
             break;
         case 'Enter':
         case '=':
             equate (e.key);
+            key = document.getElementById('=');
+            UI.animateButton(key);
             break;
         case 'Backspace':
             clearE();
+            key = document.getElementById('clearEntry');
+            UI.animateButton(key);
             break;
         case 'Delete':
             clearA();
+            key = document.getElementById('clearAll');
+            UI.animateButton(key);
             break;
-        case 'Q':
-        case 'q':
+        case 'S':
+        case 's':
             capitalize = e.key.toUpperCase();
             squareRootInput (capitalize);
+            key = document.getElementById(capitalize);
+            UI.animateButton(key);
             break;
         case 'A':
         case 'a':
@@ -292,6 +303,8 @@ function keyBoardRouting (e) {
         case 'd':
             capitalize = e.key.toUpperCase();
             ioVariable(capitalize);
+            key = document.getElementById(capitalize);
+            UI.animateButton(key);
             break;           
     }
 }
