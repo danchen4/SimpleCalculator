@@ -4,9 +4,9 @@ class UI {
 
     // Displays numpad buttons in #display
     static displayNumber(disp) {
-        // Do not display more than 10 digits append '..' if 8 or more decimal places; 
-        if (displayNumbers.includes('.')) {
-            let modifiedText = displayNumbers.substr(0,displayNumbers.indexOf('.') + 10);
+        // Do not display more than 6 places places past decimal
+        if (disp.includes('.')) {
+            let modifiedText = disp.substr(0,disp.indexOf('.') + 6);
             display.textContent = modifiedText;
         } else {
             display.textContent = disp;
@@ -62,15 +62,11 @@ class UI {
     static getVariables (variable) {
         UI.clearDisplay;
         UI.storeNumbers(variableObj[variable].toString());
-        UI.displayNumber(variableObj[variable]);
+        UI.displayNumber(variableObj[variable].toString());
     }
 
     static displayVariablesOnButton (variable) {
-        let newdiv = document.createElement('div');
         let parent = document.getElementById(variable);
-        let div = document.querySelector(`btn-${variable}`);
-        
-        newdiv.className = 'variable';
         
         // Need to remove decimals places past 2 and append '..' if 3 or more decimal places; 
         if (displayNumbers.includes('.')) {
@@ -78,20 +74,20 @@ class UI {
             if (displayNumbers.length - displayNumbers.indexOf('.') > 3) {
                 // newdiv.textContent = `${modifiedText}..`;
                 parent.innerHTML =`
-                    Var ${variable}<br>
+                    variable ${variable}<br>
                     <span class="variable">${modifiedText}..</span>
                 `;
             } else {
                 // newdiv.textContent = modifiedText;
                 parent.innerHTML = `
-                    Var ${variable}<br>
+                    variable ${variable}<br>
                     <span class="variable">${modifiedText}</span>
                 `;
             }
         } else {
             // newdiv.textContent = displayNumbers;
             parent.innerHTML = `
-                Var ${variable}<br>
+                variable ${variable}<br>
                 <span class="variable">${displayNumbers}</span>
             `;
         }

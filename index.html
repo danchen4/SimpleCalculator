@@ -11,29 +11,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Smart Calculator</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/911c2c465a.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Quantico|Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
-
     <div class="container">
-        <h1 class="text-primary text-center mt-5"><i class="fas fa-calculator"></i> SMART CALCULATOR</h1>
-        <div id="calculator" class="ml-auto mr-auto mt-4">
+        <h1 class="title"><i class="fas fa-calculator"></i> SMART CALCULATOR</h1>
+        <div id="calculator">
             <div class="flex-c-center">
-                <div class="screen text-center border border-1 border-primary" >
-                <div id="display" class="p-2"></div>
+                <div class="screen">
+                    <div id="display-history" class="p-2"></div>
+                    <div id="display" class="p-2"></div>
                 </div>
             </div>
-            <div id="pad" class="calculator-buttons m-auto">
-                <!-- Row One -->
-                <div id="A" class="num-button btn-color-6 btn-A">var A</div>
-                <div id="B" class="num-button btn-color-6 btn-B">var B</div>
-                <div id="C" class="num-button btn-color-6 btn-C">var C</div>
-                <div id="D" class="num-button btn-color-6 btn-D">var D</div>
+            <div id="pad">
+                <!-- Row One -->    
+                <div id="A" class="num-button btn-color-6 btn-var btn-A">variable A</div>
+                <div id="B" class="num-button btn-color-6 btn-var btn-B">variable B</div>
+                <div id="C" class="num-button btn-color-6 btn-var btn-C">variable C</div>
+                <div id="D" class="num-button btn-color-6 btn-var btn-D">variable D</div>
                 <div id="clearAll" class="num-button btn-color-3">C</div>
                 <!-- Row Two -->
                 <div id="7"class="num-button btn-color-1">7</div>
@@ -66,10 +65,7 @@
     </div>
 
 
-    <script src="js/script.js">
-
-
-    </script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>
