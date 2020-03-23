@@ -78,18 +78,21 @@ h1.title {
     margin: 0 auto;
     box-shadow: $-boxshadow-screen;
     font-family: $-font-1;
-    letter-spacing: 0.25em;
+    // letter-spacing: 0.25em;
     overflow: hidden;  
 }
 
 #display-history {
-    height: 30%;
+    height: 35%;
+    padding: 4px;
     background-color: $-c-green-3;
+    font-size: 0.8em;
 }
 
 #display {
-    height: 70%;
     @include flex(column,center,flex-end);
+    height: 65%;
+    padding: 4px;
     background-color: $-c-green-3;
     font-size: 2em;
     font-weight: 500;
@@ -113,14 +116,14 @@ h1.title {
 }
 
 .btn-var {
-    font-size: 0.7em;
-    @include flex(column,space-between,center);
+    font-size: 0.65em;
+    @include flex(column,center,center);
 }
 
 .variable {
     box-shadow: none !important;
     color:$-c-grey-1;
-    font-size: 0.6em;
+    // font-size: 0.65em;
 }
 
 .num-button {

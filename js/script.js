@@ -3,19 +3,32 @@
 class UI {
 
     // Displays numpad buttons in #display
-    static displayNumber(disp) {
-        // Do not display more than 6 places places past decimal
-        if (disp.includes('.')) {
-            let modifiedText = disp.substr(0,disp.indexOf('.') + 6);
-            display.textContent = modifiedText;
-        } else {
-            display.textContent = disp;
-        }
+    static display (input) {
+        let text = '';
+        let convertedNumber;
+        let outputArray = output.trim().split(' ');
+        console.log(outputArray);
+        outputArray.forEach((item)=>{
+            if (!isNaN(item)) {// If number, then only allow four decimal places after decimal
+                if (item.lastIndexOf('.') === item.length - 1) {//If there is a '.' at end, then just display since parseFloat method will remove it.
+                    text += `${item}`;
+                } else if (item.lastIndexOf('0') === item.length - 1)  { //If a '0' is entered after '.', then just display since parseFloat method will remove it.
+                    text += `${item}`;
+                } else {
+                    // convertedNumber = Math.round(item + 0.01 * 10000) / 10000;
+                    convertedNumber = +parseFloat(item).toFixed(toDecimal);
+                    text += `${convertedNumber}`;
+                }
+            } else {//If an operator then need to add spaces before and after
+                console.log('dick');
+                text += ` ${item} `;
+            }
+        })
+        display.textContent = text;
     }
 
     // Stores numbers in numbers[]
     static storeNumbers(item) {
-
         if ((numbers.length === 0 && operator.length === 0) || numbers.length === operator.length) {//When both numbers[] and operator[] are empty or equal in length then store
             if (item.includes('%')) { //If displayed number contains a '%' then convert to percentage
                 numbers.unshift(parseFloat(item)/100);
@@ -23,7 +36,6 @@ class UI {
                 numbers.unshift(parseFloat(item));
             }
         } 
-
         // If number is Total from previous answer, then replace Total in case of '+/-' or %
         if (numberIsTotal) {
             if (item.includes('%')) {
@@ -46,6 +58,7 @@ class UI {
         console.log(`operator[] after store: ${operator}`);
     }
 
+    // #region
     static storeVariables (input) {
         if (displayNumbers !== '') {
             if (displayNumbers.includes('%')) { //If displayed number contains a '%' then convert to percentage
@@ -62,7 +75,7 @@ class UI {
     static getVariables (variable) {
         UI.clearDisplay;
         UI.storeNumbers(variableObj[variable].toString());
-        UI.displayNumber(variableObj[variable].toString());
+        UI.display(variableObj[variable].toString());
     }
 
     static displayVariablesOnButton (variable) {
@@ -105,9 +118,18 @@ class UI {
         },150)
     }
 
-    // Clear display and displayNumbers;
-    static clearDisplay() {
+    // Clear displayNumbers variable;
+    static clearDisplayNumbers() {
         displayNumbers = '';
+    }
+
+    // Clear output;
+    static clearOutput() {
+        output = '';
+    }
+
+    // Clear display;
+    static clearDisplay() {
         display.innerHTML = '';
     }
 
@@ -116,12 +138,15 @@ class UI {
         numbers.length = 0;
         operator.length = 0;
     }
+    //#endregion
+
 }
 
 // Math class functions 
-class mathCalc {
+    class mathCalc {
     static calculate () {
         let total = 0;
+        let convertedNumber;
 
         if (numbers.length > 0 ) { //Make sure numbers[] has at least 1 item, or else infinite loop
             while (numbers.length > 1) {  // Since var_total is unshifted to inputs, length will be minimum 1
@@ -150,28 +175,37 @@ class mathCalc {
                     total = variable1;
             }
 
-            numbers.unshift(total);
+            //Provide all answers to 4 decimal places
+            convertedNumber = +parseFloat(total).toFixed(toDecimal);
+            numbers.unshift(convertedNumber);
             numberIsTotal = true;  //When total is stored, then sit the flag to true (to handle +/-)
             }
         }
-        console.log(total);
         return total;
     }
 }
 
+// Variable declarations
+//#region
 const numbers = [];
 const operator = [];
 const inputs = [];
 let displayNumbers = '';  // Stores display text
 let numberIsTotal = false;  //Flag to check if item in numbers[] is the total from previous equation
 let variableObj = {};
+let output = '';
+let toDecimal = 5; //Number of decimals
 
 // Calculator sound on clicks and Keyboard presses
 let clickSound = new Audio();
 clickSound.src='../media/audio/office-calculator-single-button-press.mp3';
+//#endregion
 
+// DOM elements
+//#region
 //DOM Items
 let display = document.getElementById('display');
+let displayHistory = document.getElementById('display-history');
 
 // Numpad IDs
 let one = document.getElementById('1');
@@ -228,7 +262,7 @@ divide.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.anim
 squareRoot.addEventListener('click',(e)=>{squareRootInput(e.target.innerText), UI.animateButton(e.target)});
 
 // Equal sign click
-equal.addEventListener('click',equate);
+equal.addEventListener('click',(e)=>{equate(e), UI.animateButton(e.target)});
 
 // '%' and '+/-' click
 percent.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
@@ -243,9 +277,9 @@ variableA.addEventListener('click',(e)=>{ioVariable('A'), UI.animateButton(e.tar
 variableB.addEventListener('click',(e)=>{ioVariable('B'), UI.animateButton(e.target)});
 variableC.addEventListener('click',(e)=>{ioVariable('C'), UI.animateButton(e.target)});
 variableD.addEventListener('click',(e)=>{ioVariable('D'), UI.animateButton(e.target)});
+//#endregion
 
 // Events
-
 function keyBoardRouting (e) {
     let capitalize, key;
     console.log(e.key);  
@@ -308,7 +342,7 @@ function keyBoardRouting (e) {
             break;           
     }
 }
-
+  
 // Store or Get variable inputs
 function ioVariable(input) {
     if(input in variableObj) {
@@ -322,76 +356,115 @@ function ioVariable(input) {
 
 // Handles number inputs and '%' and '.'
 function numberInput (input) {
-    console.log(input);
-    // Everytime a number is clicked, append to var_displayNumbers     
-    if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s to be appended
+    // Everytime a number is clicked, append to displayNumbers
+    if (displayNumbers.lastIndexOf('.') === displayNumbers.length - 1 && input === '%') {//Dont' allow '%' right after '.'
+        return;
+    } else if (!displayNumbers.includes('%')) { //Don't allow multiple '%'s to be appended.  Once '%' is inputted, then can't add anything afterwards
         let displayNumbersCopy = displayNumbers;
         displayNumbersCopy += `${input}`;
         if (displayNumbersCopy.split('.').length -1 < 2) {  //Don't allow multiple '.'s to be added
             displayNumbers += `${input}`; 
-            UI.displayNumber(displayNumbers);
+            output += `${input}`; 
+            UI.display(output);
         }       
     } 
 }
 
 // Handles math operator inputs: +,-,*,/
 function operatorInput (input) {
-    // Store what's in displayNumbers into numbers[] array if not blank
+    // Store displayNumbers into numbers[] if not blank and don't allow operators unless there is a number
     if (displayNumbers !== '') {
         UI.storeNumbers(displayNumbers);
+    
+        // If operator is already in output, then replace with most recent operator
+        if (output.trim().lastIndexOf('+') === output.trim().length - 1 || output.trim().lastIndexOf('-') === output.trim().length-1   || output.trim().lastIndexOf('x') === output.trim().length-1 || output.trim().lastIndexOf('÷') === output.trim().length-1) {
+            let array = output.trim().split(' ');  //remove space after operator with trim();
+            array.splice(array.length-1,1,input); // replace last operator with current operator;
+            array.push(' '); // add space after operator that was removed from trim();
+            output = array.join(' ');
+        } else {
+            output += ` ${input} `; //add space between operators to use as delimiter
+        }
     }
-    // Clear display
-    UI.clearDisplay();
 
-    // There should always be an odd items of operators and even number of numbers to prevent adding multiple operators
+    UI.display(output);
+
+    // Clear display
+    // UI.clearDisplay();
+    UI.clearDisplayNumbers();
+    
+    // Store operator in operator[]
     UI.storeOperator(input);
 }
 
 function changeBitInput (e) {
     if (displayNumbers !== '') { 
-        let array = displayNumbers.split('');
-        if (!displayNumbers.includes('-')) {  
-            array.unshift('-');
-            displayNumbers = array.join('');
-            UI.displayNumber(displayNumbers);
+        if (displayNumbers.indexOf('-') < 0) {//If there is no '-' in front
+            displayNumbers = '-'+displayNumbers;
+            output = displayNumbers;
+            UI.display(displayNumbers);
             if (numberIsTotal) {  // If number in numbers[] is total from previous equation, then need to change sign in numbers[]
                 numbers.splice(0,1,numbers[0] * -1);
             }
-        } else if (displayNumbers.includes('-')) {
-            array.shift();
-            displayNumbers = array.join('');
-            UI.displayNumber(displayNumbers);
+        } else if (displayNumbers.indexOf('-') === 0) {//If there is '-' in front
+            displayNumbers = displayNumbers.slice(1);
+            output = displayNumbers;
+            UI.display(displayNumbers);
         }
     }
 }
 
 function squareRootInput (e) {
+        let convertedNumber;
         displayNumbers = Math.sqrt(displayNumbers).toString();  //Math.sqrt will convert to number
-        UI.displayNumber(displayNumbers);
+        
+        // Only show square root to the 4 decimals
+        convertedNumber = +parseFloat(displayNumbers).toFixed(4);
+        output = convertedNumber.toString();
+        UI.display(displayNumbers);
 }
     
 // Equal sign click
 function equate() {
     // Need to store Numbers from last entry
-    if (displayNumbers !== '') {  
+
+    // Hitting the equal should only compute if the following three conditions are met:
+    // 1. There is at least one operator in the output
+    // 2. The operator is not an '-' in the front
+    // 3. There is a number after the operator (so a binary operator)
+    if ((output.indexOf('+') > -1 || (output.indexOf('-') > -1 && displayNumbers.indexOf('-') !== 0) || output.indexOf('x') > -1 || output.indexOf('÷') > -1) && (!isNaN(output.trim().charAt(output.trim().length-1)))) {  
         UI.storeNumbers(displayNumbers);
         UI.clearDisplay();
+        UI.clearDisplayNumbers();
+        UI.clearOutput();
+
+        if (operator.length > 0) {
+            displayNumbers = mathCalc.calculate().toString();  //Need to keep the displayNumbers equal to solution of previous euation
+            
+            // Store total from previous answer into output
+            output = numbers[0].toString();
+            UI.display(output); 
+            console.log(`numbers[] after equal: ${numbers}`);
+    
+            // Store total from previous answer into output
+            console.log(`output after equal: ${output}`);
+        }
     };
 
     // Calcuate arithmetic operation based on sequence of inputs[] and operator[] arrays
-    if (operator.length > 0) {
-        displayNumbers = mathCalc.calculate().toString();  //Need to keep the displayNumbers equal to solution of previous euation
-        UI.displayNumber(displayNumbers); 
-    }
+
 }
 
 // Clear Entry
 function clearE(e) {
     UI.clearDisplay();
+    UI.clearDisplayNumbers();
 }
 
 // Clear All
 function clearA(e) {
     UI.clearDisplay();
+    UI.clearDisplayNumbers();
+    UI.clearOutput();
     UI.clearArrays();
 }
