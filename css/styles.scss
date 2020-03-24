@@ -74,7 +74,7 @@ h1.title {
 .screen {
     background-color: rgba(240, 240, 240, 0.8);
     width: 100%;
-    height: 70px;
+    height: 80px;
     margin: 0 auto;
     box-shadow: $-boxshadow-screen;
     font-family: $-font-1;
@@ -83,16 +83,18 @@ h1.title {
 }
 
 #display-history {
+    @include flex(column,center,flex-end);
     height: 35%;
-    padding: 4px;
+    padding: 6px 8px 4px 8px;
     background-color: $-c-green-3;
-    font-size: 0.8em;
+    font-size: 0.9em;
+    font-weight: 400;
 }
 
 #display {
     @include flex(column,center,flex-end);
     height: 65%;
-    padding: 4px;
+    padding: 4px 8px 6px 8px;
     background-color: $-c-green-3;
     font-size: 2em;
     font-weight: 500;

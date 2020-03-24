@@ -57,7 +57,7 @@ h1.title {
 .screen {
   background-color: rgba(240, 240, 240, 0.8);
   width: 100%;
-  height: 70px;
+  height: 80px;
   margin: 0 auto;
   -webkit-box-shadow: inset 0 0 5px rgba(26, 2, 2, 0.3);
           box-shadow: inset 0 0 5px rgba(26, 2, 2, 0.3);
@@ -66,10 +66,24 @@ h1.title {
 }
 
 #display-history {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
   height: 35%;
-  padding: 4px;
+  padding: 6px 8px 4px 8px;
   background-color: rgba(207, 224, 206, 0.4);
-  font-size: 0.8em;
+  font-size: 0.9em;
+  font-weight: 400;
 }
 
 #display {
@@ -87,7 +101,7 @@ h1.title {
       -ms-flex-align: end;
           align-items: flex-end;
   height: 65%;
-  padding: 4px;
+  padding: 4px 8px 6px 8px;
   background-color: rgba(207, 224, 206, 0.4);
   font-size: 2em;
   font-weight: 500;

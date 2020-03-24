@@ -23,9 +23,16 @@ class UI {
                 text += ` ${item} `;
             }
         })
-        display.textContent = text;
+
+        // Adding commas
+        display.textContent = text.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    static displayEquation() {
+        displayHistory.textContent = equation;
+    }
+
+    // #region
     // Stores numbers in numbers[]
     static storeNumbers(item) {
         if ((numbers.length === 0 && operator.length === 0) || numbers.length === operator.length) {//When both numbers[] and operator[] are empty or equal in length then store
@@ -57,7 +64,6 @@ class UI {
         console.log(`operator[] after store: ${operator}`);
     }
 
-    // #region
     static storeVariables (input) {
         let convertedNumber =  +parseFloat(operand).toFixed(toDecimal);
 
@@ -83,10 +89,10 @@ class UI {
 
     static displayVariablesOnButton (variable) {
         let parent = document.getElementById(variable);
-        
+        let operandWithCommas = operand.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");        
         // Need to remove decimals places past 2 and append '..' if 3 or more decimal places; 
         if (operand.includes('.')) {
-            let modifiedText = operand.substr(0,operand.indexOf('.') + 3);
+            let modifiedText = operand.substr(0,operand.indexOf('.') + 3).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             if (operand.length - operand.indexOf('.') > 3) {
                 // newdiv.textContent = `${modifiedText}..`;
                 parent.innerHTML =`
@@ -104,14 +110,14 @@ class UI {
             // newdiv.textContent = operand;
             parent.innerHTML = `
                 variable ${variable}<br>
-                <span class="variable">${operand}</span>
+                <span class="variable">${operandWithCommas}</span>
             `;
         }
 
         // parent.insertBefore(newdiv,div);
     }
 
-    // #region
+    
     static async animateButton (element) {
         clickSound.play(); // Play sound
         element.style.margin = '2px -2px -2px 2px';
@@ -134,7 +140,11 @@ class UI {
 
     // Clear display;
     static clearDisplay() {
-        display.innerHTML = '';
+        display.textContent = '';
+    }
+
+    static clearEquation() {
+        displayHistory.textContent = '';
     }
 
     // Clear all arrays
@@ -198,7 +208,8 @@ let operand = '';  // Stores display text
 let numberIsTotal = false;  //Flag to check if item in numbers[] is the total from previous equation
 let variableObj = {};
 let output = '';
-let toDecimal = 5; //Number of decimals
+let equation = '';
+let toDecimal = 4; //Number of decimals
 
 // Calculator sound on clicks and Keyboard presses
 let clickSound = new Audio();
@@ -425,54 +436,53 @@ function changeBitInput (e) {
 
 function squareRootInput (e) {
         let convertedNumber;
+
+        equation = '√' + output + ' = ';
         operand = Math.sqrt(operand).toString();  //Math.sqrt will convert to number
-        
         // Only show square root to the 4 decimals
         convertedNumber = +parseFloat(operand).toFixed(4);
         output = convertedNumber.toString();
         UI.display();
+        UI.displayEquation();
 }
     
 // Equal sign click
 function equate() {
-    // Need to store Numbers from last entry
-
     // Hitting the equal should only compute if the following three conditions are met:
     // 1. There is at least one operator in the output
     // 2. The operator is not an '-' in the front
     // 3. There is a number after the operator (so a binary operator)
     if ((output.indexOf('+') > -1 || (output.indexOf('-') > -1 && operand.indexOf('-') !== 0) || output.indexOf('x') > -1 || output.indexOf('÷') > -1) && (!isNaN(output.trim().charAt(output.trim().length-1)))) {  
         UI.storeNumbers(operand);
+        equation = output + ` = `;
         UI.clearDisplay();
         UI.clearOperand();
         UI.clearOutput();
 
-        if (operator.length > 0) {
-            operand = mathCalc.calculate().toString();  //Need to keep the operand equal to solution of previous euation
+        operand = mathCalc.calculate().toString();  //Need to keep the operand equal to solution of previous euation
             
-            // Store total from previous answer into output
-            output = numbers[0].toString();
-            UI.display(); 
-            console.log(`numbers[] after equal: ${numbers}`);
-    
-            // Store total from previous answer into output
-            console.log(`output after equal: ${output}`);
-        }
+        // Store total from previous answer into output
+        output = numbers[0].toString();
+        UI.displayEquation();
+        UI.display(); 
+        console.log(`numbers[] after equal: ${numbers}`);
+
+        // Store total from previous answer into output
+        console.log(`output after equal: ${output}`);
     };
-
-    // Calcuate arithmetic operation based on sequence of inputs[] and operator[] arrays
-
 }
 
 // Clear Entry
 function clearE(e) {
     UI.clearDisplay();
+    UI.clearEquation()
     UI.clearOperand();
 }
 
 // Clear All
 function clearA(e) {
     UI.clearDisplay();
+    UI.clearEquation()
     UI.clearOperand();
     UI.clearOutput();
     UI.clearArrays();
