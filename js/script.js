@@ -66,58 +66,62 @@ class UI {
 
     static storeVariables (input) {
         let convertedNumber =  +parseFloat(operand).toFixed(toDecimal);
-
         if (operand !== '') {
             if (operand.includes('%')) { //If displayed number contains a '%' then convert to percentage
                 variableObj[input] = convertedNumber/100;
             } else {
                 variableObj[input] = convertedNumber;
             }
+            UI.displayVariablesOnButton(input);
         }
-
-        UI.displayVariablesOnButton(input);
         console.log(variableObj);   
     }
 
     static getVariables (variable) {
+        // When the variable is retrieved, it will wipe all history 
         UI.clearDisplay;
         UI.storeNumbers(variableObj[variable].toString());
         operand = variableObj[variable].toString();
-        output = variableObj[variable].toString();
+        //When retrieving variable, if there is an operator than add to output, otherwise replace output with variable
+        if ((output.indexOf('+') > -1 || output.indexOf('-') > -1 || output.indexOf('x') > -1 || output.indexOf('÷') > -1)) {  
+            output += variableObj[variable].toString();
+        } else {
+            output = variableObj[variable].toString();
+        }
         UI.display();
     }
 
     static displayVariablesOnButton (variable) {
         let parent = document.getElementById(variable);
         let operandWithCommas = operand.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");        
-        // Need to remove decimals places past 2 and append '..' if 3 or more decimal places; 
+        // Need to remove decimals places past 2 and append '..' if 3 or more decimal places;   
         if (operand.includes('.')) {
             let modifiedText = operand.substr(0,operand.indexOf('.') + 3).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             if (operand.length - operand.indexOf('.') > 3) {
-                // newdiv.textContent = `${modifiedText}..`;
-                parent.innerHTML =`
-                    variable ${variable}<br>
-                    <span class="variable">${modifiedText}..</span>
-                `;
-            } else {
-                // newdiv.textContent = modifiedText;
-                parent.innerHTML = `
-                    variable ${variable}<br>
-                    <span class="variable">${modifiedText}</span>
-                `;
+                parent.children[2].textContent = `${modifiedText}..`;
+            } 
+            else {
+                parent.children[2].textContent = `${modifiedText}`;
             }
         } else {
             // newdiv.textContent = operand;
-            parent.innerHTML = `
-                variable ${variable}<br>
-                <span class="variable">${operandWithCommas}</span>
-            `;
+            parent.children[2].textContent = operandWithCommas;
         }
-
         // parent.insertBefore(newdiv,div);
-    }
+    }    
 
+    static clearAllVariables() {
+        // Got through all stored variables in object and remove content 
+        for (let key in variableObj) {
+            let element = document.getElementById(key);
+            element.children[2].textContent = '';
+            element.children[3].textContent = '';
+        }
+        // Clear the variableObj
+        variableObj = {};
+    }
     
+    //#region
     static async animateButton (element) {
         clickSound.play(); // Play sound
         element.style.margin = '2px -2px -2px 2px';
@@ -236,8 +240,8 @@ let zero = document.getElementById('0');
 let decimal = document.getElementById('.');
 
 // Operator IDs
-let clearEntry = document.getElementById('clearEntry');
-let clearAll = document.getElementById('clearAll');
+let clearEntryButton = document.getElementById('clearEntry');
+let clearAllButton = document.getElementById('clearAll');
 let divide = document.getElementById('÷');
 let multiply = document.getElementById('x');
 let subtract = document.getElementById('-');
@@ -253,45 +257,58 @@ let variableB = document.getElementById('B');
 let variableC = document.getElementById('C');
 let variableD = document.getElementById('D');
 
+// let clearA = document.getElementById('clearA');
+// let clearB = document.getElementById('clearB');
+// let clearC = document.getElementById('clearC');
+// let clearD = document.getElementById('clearD');
+
 // Keyboard presses
 window.addEventListener('keyup',keyBoardRouting);
 
 // Number mouse clicks
-one.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-two.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-three.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-four.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-five.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-six.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-seven.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-eight.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-nine.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-zero.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-decimal.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
+one.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+two.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+three.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+four.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+five.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+six.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+seven.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+eight.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+nine.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+zero.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+decimal.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
 
 // Operator mouse clicks
-add.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.animateButton(e.target)});
-subtract.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.animateButton(e.target)});
-multiply.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.animateButton(e.target)});
-divide.addEventListener('click',(e)=>{operatorInput(e.target.innerText), UI.animateButton(e.target)});
-squareRoot.addEventListener('click',(e)=>{squareRootInput(e.target.innerText), UI.animateButton(e.target)});
+add.addEventListener('click',(e)=>{operatorInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+subtract.addEventListener('click',(e)=>{operatorInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+multiply.addEventListener('click',(e)=>{operatorInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+divide.addEventListener('click',(e)=>{operatorInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+
+// Squareroot mouse click
+squareRoot.addEventListener('click',(e)=>{squareRootInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
 
 // Equal sign click
-equal.addEventListener('click',(e)=>{equate(e), UI.animateButton(e.target)});
+equal.addEventListener('click',(e)=>{equate(), UI.animateButton(e.target)});
 
 // '%' and '+/-' click
-percent.addEventListener('click',(e)=>{numberInput(e.target.innerText), UI.animateButton(e.target)});
-changeBit.addEventListener('click',(e)=>{changeBitInput(e), UI.animateButton(e.target)})
+percent.addEventListener('click',(e)=>{numberInput(e.target.children[1].innerHTML), UI.animateButton(e.target)});
+changeBit.addEventListener('click',(e)=>{changeBitInput(), UI.animateButton(e.target)})
 
 // Clear button mouse clicks
-clearEntry.addEventListener('click',(e)=>{clearE(e), UI.animateButton(e.target)});
-clearAll.addEventListener('click',(e)=>{clearA(e), UI.animateButton(e.target)});
+clearEntryButton.addEventListener('click',(e)=>{clearEntry(), UI.animateButton(e.target)});
+clearAllButton.addEventListener('click',(e)=>{clearAll(), UI.animateButton(e.target)});
 
 // Varible button mouse clicks
-variableA.addEventListener('click',(e)=>{ioVariable('A'), UI.animateButton(e.target)});
-variableB.addEventListener('click',(e)=>{ioVariable('B'), UI.animateButton(e.target)});
-variableC.addEventListener('click',(e)=>{ioVariable('C'), UI.animateButton(e.target)});
-variableD.addEventListener('click',(e)=>{ioVariable('D'), UI.animateButton(e.target)});
+variableA.addEventListener('click',(e)=>{ioVariable('A', e), UI.animateButton(e.target)});
+variableB.addEventListener('click',(e)=>{ioVariable('B', e), UI.animateButton(e.target)});
+variableC.addEventListener('click',(e)=>{ioVariable('C', e), UI.animateButton(e.target)});
+variableD.addEventListener('click',(e)=>{ioVariable('D', e), UI.animateButton(e.target)});
+
+// clearA.addEventListener('click',(e)=>UI.clearVariable(e.target));
+// clearB.addEventListener('click',(e)=>UI.clearVariable(e.target));
+// clearC.addEventListener('click',(e)=>UI.clearVariable(e.target));
+// clearD.addEventListener('click',(e)=>UI.clearVariable(e.target));
+
 //#endregion
 
 // Events
@@ -333,12 +350,12 @@ function keyBoardRouting (e) {
             UI.animateButton(key);
             break;
         case 'Backspace':
-            clearE();
+            clearEntry();
             key = document.getElementById('clearEntry');
             UI.animateButton(key);
             break;
         case 'Delete':
-            clearA();
+            clearAll();
             key = document.getElementById('clearAll');
             UI.animateButton(key);
             break;
@@ -348,6 +365,9 @@ function keyBoardRouting (e) {
             squareRootInput (capitalize);
             key = document.getElementById(capitalize);
             UI.animateButton(key);
+            break;
+        case 'PageDown':
+            changeBitInput();
             break;
         case 'A':
         case 'a':
@@ -366,13 +386,13 @@ function keyBoardRouting (e) {
 }
   
 // Store or Get variable inputs
-function ioVariable(input) {
-    if(input in variableObj) {
+function ioVariable(variable) {
+    if(variable in variableObj) {
         console.log('Get');
-        UI.getVariables(input);
+        UI.getVariables(variable);
     } else {
         console.log('Store');
-        UI.storeVariables(input);
+        UI.storeVariables(variable);
     }
 }
 
@@ -410,14 +430,11 @@ function operatorInput (input) {
     }
 
     UI.display();
-
     UI.clearOperand();
-    
-    // Store operator in operator[]
     UI.storeOperator(input);
 }
 
-function changeBitInput (e) {
+function changeBitInput () {
     if (operand !== '') { 
         if (operand.indexOf('-') < 0) {//If there is no '-' in front
             operand = '-'+operand;
@@ -434,9 +451,8 @@ function changeBitInput (e) {
     }
 }
 
-function squareRootInput (e) {
+function squareRootInput (input) {
         let convertedNumber;
-
         equation = '√' + output + ' = ';
         operand = Math.sqrt(operand).toString();  //Math.sqrt will convert to number
         // Only show square root to the 4 decimals
@@ -473,17 +489,20 @@ function equate() {
 }
 
 // Clear Entry
-function clearE(e) {
+function clearEntry() {
     UI.clearDisplay();
-    UI.clearEquation()
+    UI.clearEquation();
     UI.clearOperand();
+    UI.clearOutput();
 }
 
 // Clear All
-function clearA(e) {
+function clearAll() {
     UI.clearDisplay();
-    UI.clearEquation()
+    UI.clearEquation();
     UI.clearOperand();
     UI.clearOutput();
     UI.clearArrays();
+    UI.clearAllVariables();
 }
+

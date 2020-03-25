@@ -17,6 +17,7 @@ $-c-green-3:rgba(207, 224, 206, 0.4);
 $-c-blue-1: rgb(159, 181, 205);
 $-c-blue-2: rgb(41, 124, 161);
 $-c-red-1: rgb(217, 113, 113);
+$-c-red-2: rgb(210, 44, 44);
 $-c-grey-1: rgb(159, 184, 195);
 $-c-grey-2: rgb(185, 198, 200);
 $-c-grey-3: rgb(225, 225, 225);
@@ -34,10 +35,6 @@ $-font-2: 'Roboto', sans-serif;
     flex-direction:$direction;
     justify-content:$justify;
     align-items: $align-items;
-}
-
-@mixin grid () {
-    display:grid;
 }
 
 // Utility
@@ -60,7 +57,7 @@ h1.title {
 }
 
 #calculator {
-    max-width: 480px;
+    max-width: 500px;
     width: 100%;
     padding: 2.5em;
     border: 1px solid $-c-grey-3;
@@ -110,26 +107,40 @@ h1.title {
     display:grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1em;
-    grid-auto-rows: 50px;
-}
-
-#pad > div {
-    @include flex(column,center,center);
-}
-
-.btn-var {
-    font-size: 0.65em;
-    @include flex(column,center,center);
-}
-
-.variable {
-    box-shadow: none !important;
-    color:$-c-grey-1;
-    // font-size: 0.65em;
+    grid-auto-rows: 60px;
 }
 
 .num-button {
+    @include flex(column,center, center);
     box-shadow: $-boxshadow-btn;
+}
+
+.num-button > div {
+    pointer-events:none;
+    @include flex(column,center, center);
+    padding: 2px;
+    width: 100%;
+}
+
+.num-button .top {
+    pointer-events:none;
+    height: 20%;
+    font-size: 0.5em;
+    @include flex(column,center,flex-end);
+    color: rgb(143, 133, 134);
+}
+
+.num-button .middle {
+    height: 60%;
+}
+
+.num-button .bottom {
+    height: 20%;
+    font-size: 0.6em;
+}
+
+.enlarge {
+    font-size: 1.5em;
 }
 
 .btn-color-1 {background: $-c-grey-3;}
@@ -138,3 +149,30 @@ h1.title {
 .btn-color-4 {background: $-c-blue-1;}
 .btn-color-5 {background: $-c-green-1;}
 .btn-color-6 {background: $-c-brown-1;}
+
+.variable {
+    pointer-events:none;
+    box-shadow: none !important;
+    color:$-c-grey-1;
+    // font-size: 0.65em;
+}
+
+.btn-var {
+    font-size: 0.65em;
+    @include flex(column,center,center);
+}
+
+.btn-var .top {
+    height: 25%;
+    font-size: 0.7em;
+}
+
+.btn-var .middle {
+    height: 50%;
+}
+  
+.btn-var .bottom {
+    height: 25%;
+    font-size: 0.7em;
+}
+
