@@ -115,7 +115,6 @@ class UI {
         for (let key in variableObj) {
             let element = document.getElementById(key);
             element.children[2].textContent = '';
-            element.children[3].textContent = '';
         }
         // Clear the variableObj
         variableObj = {};
@@ -435,7 +434,7 @@ function operatorInput (input) {
 }
 
 function changeBitInput () {
-    if (operand !== '') { 
+    if (operand !== '' && numbers.length === 0) {// Change bit if there is an operand but no other numbers
         if (operand.indexOf('-') < 0) {//If there is no '-' in front
             operand = '-'+operand;
             output = operand;
@@ -448,18 +447,46 @@ function changeBitInput () {
             output = operand;
             UI.display();
         }
+    } else if (operand !== '' && numbers.length > 0) { //If there is an operand and other numbers, then only change bit of last number
+        if (operand.indexOf('-') < 0) {//If there is no '-' in front
+            operand = '-'+operand;
+            // Replaces last number of output with it's negative
+            let array = [];
+            array = output.split(' ').slice(0,array.length-1);
+            array.push(operand);
+            let string = array.join(' ');
+            output = string;
+            // output.split(' ').pop().push(operand).join(' ');
+            UI.display();
+            if (numberIsTotal) {  // If number in numbers[] is total from previous equation, then need to change sign in numbers[]
+                numbers.splice(0,1,numbers[0] * -1);
+            }
+        } else if (operand.indexOf('-') === 0) {//If there is '-' in front
+            operand = operand.slice(1);
+            // Replaces last number of output with it's negative
+            let array = [];
+            array = output.split(' ').slice(0,array.length-1);
+            array.push(operand);
+            let string = array.join(' ');
+            output = string;
+            // output.split(' ').pop().push(operand).join(' ');
+            UI.display();
+        }
     }
 }
 
 function squareRootInput (input) {
         let convertedNumber;
-        equation = '√' + output + ' = ';
-        operand = Math.sqrt(operand).toString();  //Math.sqrt will convert to number
-        // Only show square root to the 4 decimals
-        convertedNumber = +parseFloat(operand).toFixed(4);
-        output = convertedNumber.toString();
-        UI.display();
-        UI.displayEquation();
+
+        if (operand !== '') { 
+            equation = '√' + output + ' = ';
+            operand = Math.sqrt(operand).toString();  //Math.sqrt will convert to number
+            // Only show square root to the 4 decimals
+            convertedNumber = +parseFloat(operand).toFixed(4);
+            output = convertedNumber.toString();
+            UI.display();
+            UI.displayEquation();
+        }
 }
     
 // Equal sign click
